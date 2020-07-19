@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import MyNavbar from "./MyNavbar";
+import ErrorScreen from "./ErrorScreen";
 import OpinionBlock from "./OpinionBlock";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import axios from "axios";
@@ -12,6 +13,7 @@ class MainPage extends Component {
     this.state = {
       pageUsers: [],
       user: "testUser",
+      serverHasResponded: false,
     };
     this.handleUserChange = this.handleUserChange.bind(this);
   }
@@ -21,9 +23,12 @@ class MainPage extends Component {
       .get("http://localhost:1337/getusers")
       .then((res) => {
         let foundUsers = res.data;
-        this.setState({ pageUsers: foundUsers }, () => {
-          this.setState({ user: this.state.pageUsers[0] });
-        });
+        this.setState(
+          { pageUsers: foundUsers, serverHasResponded: true },
+          () => {
+            this.setState({ user: this.state.pageUsers[0] });
+          }
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -37,8 +42,8 @@ class MainPage extends Component {
   }
 
   render() {
-    let { pageUsers, user } = this.state;
-    return (
+    let { pageUsers, user, serverHasResponded } = this.state;
+    let pageContent = serverHasResponded ? (
       <div>
         <MyNavbar
           users={pageUsers}
@@ -50,7 +55,10 @@ class MainPage extends Component {
         </Jumbotron>
         <OpinionBlock currentUser={user} />
       </div>
+    ) : (
+      <ErrorScreen />
     );
+    return pageContent;
   }
 }
 
