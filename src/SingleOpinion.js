@@ -57,7 +57,7 @@ class SingleOpinion extends Component {
 
   render() {
     let { opinion, currentUser } = this.props;
-    let chosenAnswer = opinion.answers[0];
+    let chosenAnswer = opinion.answers[0] || "";
     let buttons = (
       <div className="single-opinion-buttons">
         {this.state.upvotes}{" "}
@@ -70,17 +70,20 @@ class SingleOpinion extends Component {
         {this.state.downvotes}
       </div>
     );
-    let hiddenAnswer = (
-      <div className="single-opinion-hidden-answer">
-        <h3>{chosenAnswer.answer}</h3>
-        <h3>{chosenAnswer.answerer.username}</h3>
-      </div>
-    );
+    let hiddenAnswer;
+    if (currentUser.hasVotedOn.includes(opinion._id)) {
+      hiddenAnswer = (
+        <div className="single-opinion-hidden-answer">
+          <h3>{chosenAnswer.answer}</h3>
+          <h3>{chosenAnswer.answerer.username}</h3>
+        </div>
+      );
+    }
     return (
       <div>
-        <Card style={{ margin: "auto", width: "80vw" }}>
+        <Card style={{ margin: "auto", width: "60vw" }}>
           <Card.Body>
-            <h5>{chosenAnswer.answer}</h5>
+            <h5>{opinion.question}</h5>
             {currentUser.hasVotedOn.includes(opinion._id)
               ? hiddenAnswer
               : buttons}

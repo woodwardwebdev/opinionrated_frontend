@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import Button from "react-bootstrap/Button";
 import OpinionAnswer from "./OpinionAnswer";
 import OpinionCreate from "./OpinionCreate";
@@ -9,24 +10,54 @@ class OpinionBlock extends Component {
     super(props);
     this.state = {
       userChoice: "create",
+      opinions: [],
     };
     this.handleUserChoice = this.handleUserChoice.bind(this);
+    this.handleCreateQuestion = this.handleCreateQuestion.bind(this);
+  }
+
+  componentDidMount() {
+    axios
+      .get("http://localhost:1337/getopinions")
+      .then((res) => {
+        let foundOpinions = res.data;
+        this.setState({ opinions: foundOpinions });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 
   handleUserChoice(e) {
     this.setState({ userChoice: e.target.value });
   }
 
+  handleCreateQuestion(data) {
+    axios
+      .post(`http://localhost:1337/singlequestion`, data)
+      .then((res) => {
+        console.log();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   render() {
-    const { opinions, currentUser } = this.props;
-    const { userChoice } = this.state;
+    const { currentUser } = this.props;
+    const { opinions, userChoice } = this.state;
     let content;
-    userChoice === "answer"
+    userChoice === "create"
+      ? (content = (
+          <OpinionCreate
+            currentUser={currentUser}
+            handleSubmit={this.handleCreateQuestion}
+          />
+        ))
+      : userChoice === "answer"
       ? (content = (
           <OpinionAnswer opinions={opinions} currentUser={currentUser} />
         ))
-      : userChoice === "create"
-      ? (content = <OpinionCreate currentUser={currentUser} />)
       : (content = (
           <OpinionResponses opinions={opinions} currentUser={currentUser} />
         ));

@@ -4,11 +4,12 @@ import OpinionBlock from "./OpinionBlock";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import axios from "axios";
 
+// NOTE - pageUsers in state is only there until a login page is implemented.
+// Should be replaced with login or the logged in user name.
 class MainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      opinionQuestions: [],
       pageUsers: [],
       user: "testUser",
     };
@@ -16,15 +17,6 @@ class MainPage extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get("http://localhost:1337/getopinions")
-      .then((res) => {
-        let foundOpinions = res.data;
-        this.setState({ opinionQuestions: foundOpinions });
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
     axios
       .get("http://localhost:1337/getusers")
       .then((res) => {
@@ -40,7 +32,6 @@ class MainPage extends Component {
 
   handleUserChange(user_id) {
     axios.get(`http://localhost:1337/getusers/${user_id}`).then((res) => {
-      // this.setState({ user: this.state.pageUsers[3] });
       this.setState({ user: res.data });
     });
   }
@@ -57,10 +48,7 @@ class MainPage extends Component {
         <Jumbotron>
           <h1>Opinionrated!</h1>
         </Jumbotron>
-        <OpinionBlock
-          opinions={this.state.opinionQuestions}
-          currentUser={user}
-        />
+        <OpinionBlock currentUser={user} />
       </div>
     );
   }

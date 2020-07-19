@@ -11,33 +11,22 @@ class OpinionCreate extends Component {
       questionText: "",
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  handleSubmit() {
+  render() {
+    const { handleSubmit } = this.props;
     const data = {
       question: this.state.questionText,
       createdBy: this.props.currentUser,
     };
-    axios
-      .post(`http://localhost:1337/singlequestion`, data)
-      .then((res) => {
-        console.log();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  render() {
     return (
-      <Card style={{ margin: "auto", width: "80vw" }}>
+      <Card style={{ margin: "auto", width: "60vw" }}>
         <Card.Body>
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={() => handleSubmit(data)}>
             <Card.Title>- Create a Question -</Card.Title>
             <Card.Subtitle>The more controversial the better!</Card.Subtitle>
             <Form.Group controlId="questionForm">
@@ -46,6 +35,7 @@ class OpinionCreate extends Component {
                 as="input"
                 name="questionText"
                 autoComplete="off"
+                required
               ></Form.Control>
             </Form.Group>
             <Button type="submit">Ask Away</Button>

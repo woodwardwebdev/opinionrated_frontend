@@ -18,7 +18,9 @@ class OpinionAnswer extends Component {
   componentDidMount() {
     let { opinions } = this.props;
     let chosenOpinion = opinions[Math.floor(Math.random() * opinions.length)];
-    this.setState({ randomOpinion: chosenOpinion });
+    this.setState({
+      randomOpinion: chosenOpinion || { question: "No Question" },
+    });
   }
 
   handleChange(e) {
@@ -46,10 +48,10 @@ class OpinionAnswer extends Component {
   render() {
     let { randomOpinion } = this.state;
     return (
-      <Card style={{ margin: "auto", width: "80vw" }}>
+      <Card style={{ margin: "auto", width: "60vw" }}>
         <Card.Body>
           <Form onSubmit={this.handleSubmit}>
-            <Card.Subtitle>Subtitle</Card.Subtitle>
+            <Card.Subtitle>What do you think?</Card.Subtitle>
             <Card.Title>{randomOpinion.question}</Card.Title>
             <Form.Group controlId="opinionForm">
               <Form.Control
@@ -57,6 +59,7 @@ class OpinionAnswer extends Component {
                 as="textarea"
                 rows="3"
                 name="opinionText"
+                required
               ></Form.Control>
             </Form.Group>
             <Button type="submit">Submit</Button>
