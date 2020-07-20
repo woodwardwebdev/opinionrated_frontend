@@ -18,7 +18,7 @@ class MainPage extends Component {
     this.handleUserChange = this.handleUserChange.bind(this);
   }
 
-  componentDidMount() {
+  getUsers() {
     axios
       .get("http://localhost:1337/getusers")
       .then((res) => {
@@ -33,6 +33,10 @@ class MainPage extends Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  componentDidMount() {
+    this.getUsers();
   }
 
   handleUserChange(user_id) {

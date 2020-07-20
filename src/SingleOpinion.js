@@ -17,7 +17,6 @@ class SingleOpinion extends Component {
       updated: false,
     };
     this.handleVoteButton = this.handleVoteButton.bind(this);
-    this.changeState = this.changeState.bind(this);
   }
 
   componentDidMount() {
@@ -28,9 +27,7 @@ class SingleOpinion extends Component {
     });
   }
 
-  changeState(key, obj) {
-    this.setState({ key: obj });
-  }
+  componentDidUpdate() {}
 
   handleVoteButton(e) {
     const target = e.target.id;
@@ -46,8 +43,7 @@ class SingleOpinion extends Component {
           formData
         )
         .then((res) => {
-          console.log(res);
-          this.changeState("currentUser", res.data);
+          this.setState({ currentUser: this.props.currentUser, updated: true });
         })
         .catch((err) => {
           console.log(err);
@@ -70,21 +66,20 @@ class SingleOpinion extends Component {
         {this.state.downvotes}
       </div>
     );
-    let hiddenAnswer;
-    if (currentUser.hasVotedOn.includes(opinion._id)) {
-      hiddenAnswer = (
-        <div className="single-opinion-hidden-answer">
-          <h3>{chosenAnswer.answer}</h3>
-          <h3>{chosenAnswer.answerer.username}</h3>
-        </div>
-      );
-    }
+
+    const hiddenAnswer = (
+      <div className="single-opinion-hidden-answer">
+        <h3>{chosenAnswer.answerer.username} wrote this!</h3>
+      </div>
+    );
+
     return (
       <div>
         <Card style={{ margin: "auto", width: "60vw" }}>
           <Card.Body>
             <h5>{opinion.question}</h5>
-            {currentUser.hasVotedOn.includes(opinion._id)
+            <h3>{chosenAnswer.answer}</h3>
+            {currentUser.hasVotedOn.includes(opinion._id) || this.state.updated
               ? hiddenAnswer
               : buttons}
           </Card.Body>

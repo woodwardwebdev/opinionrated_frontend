@@ -12,8 +12,10 @@ class OpinionResponses extends Component {
       <div className="single-opinion">
         <h5>Lets see your friends responses.....</h5>
         {opinions.map((opinion) => {
-          if (opinion.createdBy !== currentUser._id) {
-            console.log(opinion.answers);
+          if (
+            opinion.createdBy !== currentUser._id &&
+            opinion.answers.length > 0
+          ) {
             return (
               <SingleOpinion
                 key={opinion._id}

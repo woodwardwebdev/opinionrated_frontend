@@ -8,18 +8,12 @@ class MyNavbar extends Component {
     super(props);
     this.state = {
       isloggedin: false,
-      // user: "testUser",
     };
-    // this.handleUserChange = this.handleUserChange.bind(this);
   }
-
-  // handleUserChange(username) {
-  //   this.setState({ user: username });
-  // }
 
   render() {
     const { users, user, handleUserChange } = this.props;
-    // const { user } = this.state;
+
     return (
       <div>
         <Navbar>
@@ -28,7 +22,10 @@ class MyNavbar extends Component {
           </Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
-            <NavDropdown title={user.username} id="basic-nav-dropdown">
+            <NavDropdown
+              title={user.username || "title"}
+              id="basic-nav-dropdown"
+            >
               {users.map((singleUser) => (
                 <NavDropdown.Item
                   onClick={() => handleUserChange(singleUser._id)}

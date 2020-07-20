@@ -14,6 +14,7 @@ class OpinionBlock extends Component {
     };
     this.handleUserChoice = this.handleUserChoice.bind(this);
     this.handleCreateQuestion = this.handleCreateQuestion.bind(this);
+    this.handleCreateAnswer = this.handleCreateAnswer.bind(this);
   }
 
   componentDidMount() {
@@ -43,6 +44,18 @@ class OpinionBlock extends Component {
       });
   }
 
+  handleCreateAnswer(id, data) {
+    console.log(data);
+    axios
+      .post(`http://localhost:1337/singlequestion/${id}`, data)
+      .then((res) => {
+        console.log();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   render() {
     const { currentUser } = this.props;
     const { opinions, userChoice } = this.state;
@@ -56,7 +69,11 @@ class OpinionBlock extends Component {
         ))
       : userChoice === "answer"
       ? (content = (
-          <OpinionAnswer opinions={opinions} currentUser={currentUser} />
+          <OpinionAnswer
+            opinions={opinions}
+            currentUser={currentUser}
+            handleCreateAnswer={this.handleCreateAnswer}
+          />
         ))
       : (content = (
           <OpinionResponses opinions={opinions} currentUser={currentUser} />
